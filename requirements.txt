@@ -1,0 +1,26 @@
+# Google Cloud AI Platform for Veo API
+google-cloud-aiplatform>=1.38.0
+google-auth>=2.23.0
+
+# HTTP requests
+requests>=2.31.0
+aiohttp>=3.9.0
+
+# Video processing
+ffmpeg-python>=0.2.0
+
+# TTS - ElevenLabs API
+elevenlabs>=0.2.27
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# CLI interface
+click>=8.1.7
+rich>=13.7.0
+
+# Async support
+asyncio>=3.4.3
+
+# JSON handling
+pydantic>=2.5.0
