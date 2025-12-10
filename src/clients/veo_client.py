@@ -1,12 +1,11 @@
 """
-Google Veo API Client for video generation
+Google Veo API Client for video generation using google-genai SDK
 """
 import os
 import time
 import logging
 from typing import Optional, Dict, Any
-from google.cloud import aiplatform
-from google.oauth2 import service_account
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +20,7 @@ class VeoClient:
         credentials_path: Optional[str] = None
     ):
         """
-        Initialize Veo API client
+        Initialize Veo API client using google-genai SDK
 
         Args:
             project_id: Google Cloud project ID
@@ -30,28 +29,42 @@ class VeoClient:
         """
         self.project_id = project_id or os.getenv("GOOGLE_CLOUD_PROJECT")
         self.location = location or os.getenv("VEO_LOCATION", "us-central1")
+        self.model_name = os.getenv("VEO_MODEL", "veo-2.0-generate-001")
 
-        # Initialize credentials
+        # Set up credentials path for google-genai
         creds_path = credentials_path or os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-        if creds_path and os.path.exists(creds_path):
-            credentials = service_account.Credentials.from_service_account_file(
-                creds_path
-            )
-            aiplatform.init(
-                project=self.project_id,
-                location=self.location,
-                credentials=credentials
-            )
-        else:
-            aiplatform.init(project=self.project_id, location=self.location)
+        if creds_path:
+            # Resolve relative paths
+            creds_path = Path(creds_path)
+            if not creds_path.is_absolute():
+                creds_path = Path.cwd() / creds_path
 
-        logger.info(f"Initialized Veo client for project {self.project_id}")
+            # Set environment variable for google-genai to use
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(creds_path)
+
+        # Import and initialize the client
+        from google import genai
+        from google.genai import types
+
+        # Create Vertex AI client (not API key based)
+        self.client = genai.Client(
+            vertexai=True,
+            project=self.project_id,
+            location=self.location
+        )
+        self.types = types
+
+        # Store operations by job_id for tracking
+        self.operations = {}
+
+        logger.info(f"Initialized Veo client for project {self.project_id} in {self.location}")
 
     def generate_video(
         self,
         prompt: str,
         duration: int = 5,
         aspect_ratio: str = "16:9",
+        input_video: Optional[str] = None,
         **kwargs
     ) -> Dict[str, Any]:
         """
@@ -59,39 +72,71 @@ class VeoClient:
 
         Args:
             prompt: Text prompt for video generation
-            duration: Video duration in seconds
-            aspect_ratio: Video aspect ratio
-            **kwargs: Additional API parameters
+            duration: Video duration in seconds (5 or 8 seconds supported)
+            aspect_ratio: Video aspect ratio (9:16, 16:9, or 1:1)
+            input_video: Optional path to input video file for extension (1-30 seconds)
+                        Or GCS URI (gs://bucket/path/video.mp4)
+            **kwargs: Additional API parameters:
+                - enhance_prompt (bool): Whether to enhance the prompt (default: True)
+                - number_of_videos (int): Number of videos to generate (default: 1)
 
         Returns:
-            Dictionary containing job_id and other metadata
+            Dictionary containing job_id, operation, and other metadata
         """
-        logger.info(f"Generating video with prompt: {prompt[:100]}...")
+        if input_video:
+            logger.info(f"Extending video from: {input_video}")
+            logger.info(f"Extension prompt: {prompt[:100]}...")
+        else:
+            logger.info(f"Generating video with prompt: {prompt[:100]}...")
 
         try:
-            # Note: This is a placeholder implementation
-            # The actual Veo API interface may differ based on Google's final API
-            # You'll need to update this based on the official Veo API documentation
+            # Prepare configuration
+            config = self.types.GenerateVideosConfig(
+                number_of_videos=kwargs.get("number_of_videos", 1),
+                duration_seconds=duration,
+                enhance_prompt=kwargs.get("enhance_prompt", True),
+            )
 
-            # Using Vertex AI Imagen for now as an example structure
-            # Replace with actual Veo endpoint when available
-            from vertexai.preview.vision_models import ImageGenerationModel
+            # Prepare video input if provided
+            video_param = None
+            if input_video:
+                if input_video.startswith("gs://"):
+                    # GCS URI
+                    video_param = self.types.Video(uri=input_video)
+                    logger.info(f"Using GCS video URI: {input_video}")
+                else:
+                    # Local file - load and encode
+                    video_param = self.types.Video.from_file(input_video)
+                    logger.info(f"Loaded video from file: {input_video}")
 
-            # This is conceptual - replace with actual Veo video generation
-            model = ImageGenerationModel.from_pretrained("imagegeneration@005")
+            # Generate video
+            logger.info(f"Sending request to Veo API (model: {self.model_name})...")
+            logger.info(f"Duration: {duration}s, Aspect ratio: {aspect_ratio}")
 
-            # Placeholder for actual video generation
-            # The real implementation will use Veo's video generation endpoint
-            logger.warning("Using placeholder Veo implementation - update with actual API")
+            operation = self.client.models.generate_videos(
+                model=self.model_name,
+                prompt=prompt,
+                video=video_param,  # Add video parameter
+                config=config,
+            )
+
+            # Create job ID and store operation
+            job_id = f"veo_job_{int(time.time())}"
+            self.operations[job_id] = operation
 
             job_data = {
-                "job_id": f"veo_job_{int(time.time())}",
-                "status": "PENDING",
+                "job_id": job_id,
+                "status": "PROCESSING",  # Operation is async
                 "prompt": prompt,
                 "duration": duration,
                 "aspect_ratio": aspect_ratio,
-                "created_at": time.time()
+                "created_at": time.time(),
+                "operation": operation,  # Store the operation object
+                "operation_name": operation.name if hasattr(operation, 'name') else None,
             }
+
+            logger.info(f"Video generation started with job_id: {job_id}")
+            logger.info(f"Operation: {operation.name if hasattr(operation, 'name') else 'N/A'}")
 
             return job_data
 
@@ -103,7 +148,7 @@ class VeoClient:
         self,
         job_id: str,
         timeout: int = 600,
-        poll_interval: int = 10
+        poll_interval: int = 20
     ) -> Dict[str, Any]:
         """
         Wait for video generation to complete
@@ -111,29 +156,51 @@ class VeoClient:
         Args:
             job_id: Job identifier from generate_video
             timeout: Maximum wait time in seconds
-            poll_interval: Time between status checks in seconds
+            poll_interval: Time between status checks in seconds (recommended: 20s)
 
         Returns:
-            Dictionary with job status and video URL
+            Dictionary with job status and video data
         """
         logger.info(f"Waiting for job {job_id} to complete...")
 
+        if job_id not in self.operations:
+            raise ValueError(f"Job {job_id} not found. Did you call generate_video?")
+
+        operation = self.operations[job_id]
         start_time = time.time()
 
         while time.time() - start_time < timeout:
             try:
-                # Poll job status
-                # Replace with actual Veo API status check
-                status = self._check_job_status(job_id)
-
-                if status["status"] == "COMPLETED":
+                # Check if operation is done
+                if operation.done:
                     logger.info(f"Job {job_id} completed successfully")
-                    return status
-                elif status["status"] == "FAILED":
-                    raise Exception(f"Job {job_id} failed: {status.get('error')}")
 
-                logger.debug(f"Job {job_id} status: {status['status']}")
+                    # Extract video data
+                    if hasattr(operation, 'response') and operation.response:
+                        generated_videos = operation.response.generated_videos
+
+                        if generated_videos and len(generated_videos) > 0:
+                            video = generated_videos[0].video
+
+                            return {
+                                "job_id": job_id,
+                                "status": "COMPLETED",
+                                "video": video,
+                                "completed_at": time.time(),
+                                "operation": operation,
+                            }
+                        else:
+                            raise Exception("No videos were generated in the response")
+                    else:
+                        raise Exception(f"Operation completed but no response available: {operation}")
+
+                # Poll for updates
+                logger.info(f"Job {job_id} still processing... (elapsed: {int(time.time() - start_time)}s)")
                 time.sleep(poll_interval)
+
+                # Refresh operation status
+                operation = self.client.operations.get(operation)
+                self.operations[job_id] = operation
 
             except Exception as e:
                 logger.error(f"Error checking job status: {str(e)}")
@@ -151,18 +218,24 @@ class VeoClient:
         Returns:
             Dictionary with job status information
         """
-        # Placeholder implementation
-        # Replace with actual Veo API status endpoint
+        if job_id not in self.operations:
+            raise ValueError(f"Job {job_id} not found")
 
-        # Simulate completion after some time for demo purposes
+        operation = self.operations[job_id]
+
+        # Refresh operation
+        operation = self.client.operations.get(operation)
+        self.operations[job_id] = operation
+
+        status = "COMPLETED" if operation.done else "PROCESSING"
+
         return {
             "job_id": job_id,
-            "status": "COMPLETED",
-            "video_url": f"https://storage.googleapis.com/veo-output/{job_id}.mp4",
-            "completed_at": time.time()
+            "status": status,
+            "operation": operation,
         }
 
-    def get_video_url(self, job_id: str) -> str:
+    def get_video_url(self, job_id: str) -> Optional[str]:
         """
         Get download URL for generated video
 
@@ -170,11 +243,58 @@ class VeoClient:
             job_id: Job identifier
 
         Returns:
-            URL to download the video
+            URL to download the video, or None if using video object directly
         """
         status = self._check_job_status(job_id)
 
         if status["status"] != "COMPLETED":
             raise Exception(f"Video not ready. Status: {status['status']}")
 
-        return status.get("video_url", "")
+        operation = status["operation"]
+
+        if hasattr(operation, 'response') and operation.response:
+            generated_videos = operation.response.generated_videos
+            if generated_videos and len(generated_videos) > 0:
+                video = generated_videos[0].video
+                # Video object might have a URI
+                if hasattr(video, 'uri'):
+                    return video.uri
+
+        return None
+
+    def save_video(self, job_id: str, output_path: str) -> str:
+        """
+        Save generated video to file
+
+        Args:
+            job_id: Job identifier
+            output_path: Path where to save the video file
+
+        Returns:
+            Path to the saved video file
+        """
+        logger.info(f"Saving video from job {job_id} to {output_path}")
+
+        if job_id not in self.operations:
+            raise ValueError(f"Job {job_id} not found")
+
+        operation = self.operations[job_id]
+
+        if not operation.done:
+            raise Exception(f"Video generation not complete yet. Call wait_for_completion first.")
+
+        if hasattr(operation, 'response') and operation.response:
+            generated_videos = operation.response.generated_videos
+
+            if generated_videos and len(generated_videos) > 0:
+                video = generated_videos[0].video
+
+                # Save video using the SDK's save method
+                video.save(output_path)
+                logger.info(f"Video saved to {output_path}")
+
+                return output_path
+            else:
+                raise Exception("No videos in response")
+        else:
+            raise Exception("Operation has no response")

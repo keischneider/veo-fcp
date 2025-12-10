@@ -4,8 +4,7 @@ Text-to-Speech API client using ElevenLabs
 import os
 import logging
 from typing import Optional
-from elevenlabs.client import ElevenLabs
-from elevenlabs import save
+from elevenlabs import generate, save, set_api_key, voices
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +33,8 @@ class TTSClient:
         if not self.api_key:
             raise ValueError("ElevenLabs API key is required")
 
-        self.client = ElevenLabs(api_key=self.api_key)
+        # Set the API key globally for the elevenlabs library
+        set_api_key(self.api_key)
         logger.info("Initialized ElevenLabs TTS client")
 
     def generate_speech(
@@ -69,18 +69,16 @@ class TTSClient:
         logger.info(f"Generating speech for text: {text[:50]}...")
 
         try:
-            # Create output directory if needed
-            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+            # Create output directory if needed (only if path contains a directory)
+            output_dir = os.path.dirname(output_path)
+            if output_dir:
+                os.makedirs(output_dir, exist_ok=True)
 
-            # Generate audio
-            audio = self.client.generate(
+            # Generate audio using the elevenlabs 0.2.27 API
+            audio = generate(
                 text=text,
                 voice=voice_id,
-                model=model,
-                voice_settings={
-                    "stability": stability,
-                    "similarity_boost": similarity_boost,
-                }
+                model=model
             )
 
             # Save to file
@@ -101,8 +99,8 @@ class TTSClient:
             List of available voices
         """
         try:
-            voices = self.client.voices.get_all()
-            return voices.voices
+            voice_list = voices()
+            return voice_list
         except Exception as e:
             logger.error(f"Error listing voices: {str(e)}")
             raise
@@ -118,13 +116,16 @@ class TTSClient:
             Voice information dictionary
         """
         try:
-            voice = self.client.voices.get(voice_id)
-            return {
-                "voice_id": voice.voice_id,
-                "name": voice.name,
-                "category": voice.category,
-                "description": voice.description if hasattr(voice, 'description') else None,
-            }
+            voice_list = voices()
+            for voice in voice_list:
+                if voice.voice_id == voice_id:
+                    return {
+                        "voice_id": voice.voice_id,
+                        "name": voice.name,
+                        "category": getattr(voice, 'category', 'uncategorized'),
+                        "description": getattr(voice, 'description', None),
+                    }
+            raise ValueError(f"Voice ID '{voice_id}' not found")
         except Exception as e:
             logger.error(f"Error getting voice info: {str(e)}")
             raise

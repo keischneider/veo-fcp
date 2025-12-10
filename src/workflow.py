@@ -57,7 +57,8 @@ class VideoProductionWorkflow:
         self,
         scene_config: SceneConfig,
         voice_id: Optional[str] = None,
-        skip_lipsync: bool = False
+        skip_lipsync: bool = False,
+        input_video: Optional[str] = None
     ) -> dict:
         """
         Process a complete scene through the pipeline
@@ -66,6 +67,7 @@ class VideoProductionWorkflow:
             scene_config: Scene configuration with prompt
             voice_id: Optional voice ID for TTS
             skip_lipsync: Skip lip-sync step if True
+            input_video: Optional path to input video for extension or GCS URI
 
         Returns:
             Dictionary with paths to generated files
@@ -86,22 +88,29 @@ class VideoProductionWorkflow:
 
         try:
             # Step 1: Generate video with Veo
-            logger.info(f"Step 1: Generating video with Veo")
+            if input_video:
+                logger.info(f"Step 1: Extending video with Veo")
+                logger.info(f"Input video: {input_video}")
+            else:
+                logger.info(f"Step 1: Generating video with Veo")
+
             veo_prompt = prompt.to_veo_prompt()
             logger.info(f"Veo prompt: {veo_prompt}")
 
-            job = self.veo_client.generate_video(prompt=veo_prompt)
+            job = self.veo_client.generate_video(
+                prompt=veo_prompt,
+                input_video=input_video
+            )
             job_status = self.veo_client.wait_for_completion(job["job_id"])
-            video_url = job_status.get("video_url")
 
-            logger.info(f"Video generated: {video_url}")
+            logger.info(f"Video generated successfully")
 
-            # Step 2: Download and convert to ProRes
-            logger.info(f"Step 2: Downloading and converting to ProRes")
-            self.scene_manager.update_scene_status(scene_id, "downloading")
+            # Step 2: Save video and convert to ProRes
+            logger.info(f"Step 2: Saving video and converting to ProRes")
+            self.scene_manager.update_scene_status(scene_id, "processing")
 
             raw_video_path = os.path.join(scene_path, f"{scene_id}_veo_raw.mp4")
-            self.video_processor.download_video(video_url, raw_video_path)
+            self.veo_client.save_video(job["job_id"], raw_video_path)
 
             prores_path = os.path.join(scene_path, f"{scene_id}_veo_prores.mov")
             self.video_processor.convert_to_prores(raw_video_path, prores_path)

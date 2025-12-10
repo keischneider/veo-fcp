@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.12
 """
 CLI interface for VEO-FCP video generation pipeline
 """
@@ -36,10 +36,11 @@ def cli():
 @click.option('--emotion', help='Emotion and facial performance')
 @click.option('--dialogue', help='Dialogue text for TTS and lip-sync')
 @click.option('--voice-id', help='ElevenLabs voice ID')
+@click.option('--input-video', help='Path to input video for extension (1-30s) or GCS URI (gs://...)')
 @click.option('--skip-lipsync', is_flag=True, help='Skip lip-sync step')
 @click.option('--project-root', default='./project', help='Project root directory')
 def generate(scene_id, prompt, character, camera, lighting, emotion, dialogue,
-             voice_id, skip_lipsync, project_root):
+             voice_id, input_video, skip_lipsync, project_root):
     """Generate a video scene with optional TTS and lip-sync"""
 
     console.print(f"\n[bold cyan]VEO-FCP Video Generation Pipeline[/bold cyan]")
@@ -76,7 +77,8 @@ def generate(scene_id, prompt, character, camera, lighting, emotion, dialogue,
             result = workflow.process_scene(
                 scene_config,
                 voice_id=voice_id,
-                skip_lipsync=skip_lipsync
+                skip_lipsync=skip_lipsync,
+                input_video=input_video
             )
 
         # Display results
@@ -202,6 +204,44 @@ def status(project_root):
 
     console.print(table)
     console.print()
+
+
+@cli.command()
+@click.option('--text', required=True, help='Text to convert to speech')
+@click.option('--output', required=True, help='Output audio file path (e.g., output.wav)')
+@click.option('--voice-id', help='ElevenLabs voice ID (uses default from .env if not specified)')
+def tts(text, output, voice_id):
+    """Generate speech from text using ElevenLabs TTS"""
+
+    console.print(f"\n[bold cyan]ElevenLabs TTS Generation[/bold cyan]\n")
+    console.print(f"Text: [yellow]{text[:100]}{'...' if len(text) > 100 else ''}[/yellow]\n")
+
+    try:
+        from src.clients.tts_client import TTSClient
+
+        # Initialize TTS client
+        tts_client = TTSClient()
+
+        # Generate speech
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console
+        ) as progress:
+            task = progress.add_task("Generating speech...", total=None)
+
+            tts_client.generate_speech(
+                text=text,
+                output_path=output,
+                voice_id=voice_id
+            )
+
+        console.print(f"\n[bold green]✓ Speech generated successfully![/bold green]")
+        console.print(f"Output file: [green]{output}[/green]\n")
+
+    except Exception as e:
+        console.print(f"\n[bold red]✗ Error:[/bold red] {str(e)}\n")
+        sys.exit(1)
 
 
 @cli.command()

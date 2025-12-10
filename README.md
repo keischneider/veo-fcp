@@ -108,7 +108,10 @@ veo-fcp/
 
 ## CLI Commands
 
-### Generate Single Scene
+### Generate Single Scene (Full Pipeline)
+
+Generate video with Veo, add TTS dialogue, and apply lip-sync:
+
 ```bash
 python cli.py generate \
   --scene-id scene_01 \
@@ -120,6 +123,88 @@ python cli.py generate \
   --dialogue "Spoken dialogue"
 ```
 
+### Generate Video Only (No Audio)
+
+Generate video without TTS or lip-sync by omitting the `--dialogue` option:
+
+```bash
+python cli.py generate \
+  --scene-id scene_01 \
+  --prompt "A woman walks through a futuristic city at sunset"
+```
+
+**Use this when:**
+- You only need the video footage
+- Planning to add audio separately in Final Cut Pro
+- Testing video prompts quickly
+- Creating B-roll or background footage
+
+### Extend Existing Video
+
+Extend a 1-30 second video with Veo's video-to-video feature:
+
+```bash
+# From local file
+python cli.py generate \
+  --scene-id scene_01_extended \
+  --prompt "The camera zooms in on her face as she turns" \
+  --input-video project/scenes/scene_01/scene_01_veo_raw.mp4
+
+# From Google Cloud Storage
+python cli.py generate \
+  --scene-id scene_02 \
+  --prompt "The scene transitions to nighttime" \
+  --input-video gs://my-bucket/videos/input.mp4
+```
+
+**Use this when:**
+- Creating longer sequences from existing clips
+- Adding continuity between scenes
+- Extending generated videos with new directions
+- Building narrative progression
+
+### Generate Video Without Lip-Sync
+
+Skip the lip-sync step (dialogue audio is still generated):
+
+```bash
+python cli.py generate \
+  --scene-id scene_01 \
+  --prompt "A woman walks through a futuristic city at sunset" \
+  --dialogue "The city never sleeps, but sometimes I wish it would." \
+  --skip-lipsync
+```
+
+**Use this when:**
+- You want to manually sync audio in Final Cut Pro
+- Testing prompts quickly without waiting for lip-sync
+- D-ID API is not configured
+- You prefer to handle lip-sync separately
+
+### Generate Text-to-Speech Only
+
+Generate speech audio without video generation:
+
+```bash
+python cli.py tts \
+  --text "The city never sleeps, but sometimes I wish it would." \
+  --output dialogue.wav
+```
+
+**With custom voice:**
+```bash
+python cli.py tts \
+  --text "Your dialogue text here" \
+  --output my_audio.wav \
+  --voice-id BTL5iDLqtiUxgJtpekus
+```
+
+**Use this when:**
+- You only need voiceover audio files
+- Pre-generating dialogue for multiple scenes
+- Testing different voices before video generation
+- Creating audio-only content
+
 ### Batch Process Multiple Scenes
 ```bash
 python cli.py batch --config-file examples/multi_scene_story.json
@@ -128,6 +213,11 @@ python cli.py batch --config-file examples/multi_scene_story.json
 ### Check Project Status
 ```bash
 python cli.py status
+```
+
+### View All Commands
+```bash
+python cli.py --help
 ```
 
 ## Final Cut Pro Integration

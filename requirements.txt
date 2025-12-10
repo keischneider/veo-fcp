@@ -1,16 +1,18 @@
-# Google Cloud AI Platform for Veo API
-google-cloud-aiplatform>=1.38.0
-google-auth>=2.23.0
+# Google Gen AI SDK for Veo API
+google-genai>=0.1.0
+google-cloud-aiplatform>=1.38.0,<2.0.0
+google-auth>=2.23.0,<3.0.0
 
 # HTTP requests
-requests>=2.31.0
-aiohttp>=3.9.0
+requests>=2.31.0,<3.0.0
+urllib3>=1.26.0,<2.0.0  # Compatible with Python 3.9
+aiohttp>=3.8.0,<4.0.0
 
 # Video processing
 ffmpeg-python>=0.2.0
 
 # TTS - ElevenLabs API
-elevenlabs>=0.2.27
+elevenlabs>=0.2.27,<1.0.0
 
 # Environment variables
 python-dotenv>=1.0.0
@@ -19,8 +21,8 @@ python-dotenv>=1.0.0
 click>=8.1.7
 rich>=13.7.0
 
-# Async support
-asyncio>=3.4.3
-
 # JSON handling
-pydantic>=2.5.0
+pydantic>=2.5.0,<3.0.0
+
+# Fix for importlib.metadata compatibility with Python 3.9
+importlib-metadata>=4.0.0; python_version < "3.10"
