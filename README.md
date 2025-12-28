@@ -5,11 +5,13 @@ Complete automated pipeline for generating cinematic videos with dialogue using 
 ## Features
 
 - **Google Veo API Integration**: Generate high-quality videos from text prompts
+- **Image-to-Video**: Use an input image as the first frame for video generation
 - **Replicate & Sora Support**: Alternative video generation providers (cheaper options)
 - **Automatic ProRes Conversion**: Converts all videos to Apple ProRes 422 for seamless FCP import
 - **Text-to-Speech**: ElevenLabs integration for natural-sounding dialogue
 - **AI Lip-Sync**: D-ID Creative Reality Studio for realistic lip-syncing
 - **Video Analysis with Claude**: AI-powered video description and metadata generation
+- **YouTube Download**: Download videos from YouTube using yt-dlp for use as input or reference
 - **Scene Management**: Organized folder structure for multi-scene projects
 - **Batch Processing**: Process multiple scenes from JSON config files
 - **CLI Interface**: Easy-to-use command-line interface
@@ -18,17 +20,17 @@ Complete automated pipeline for generating cinematic videos with dialogue using 
 ## Workflow
 
 ```
-Text Prompt → Veo API → Video (MP4)
-                ↓
-        Download & Convert → ProRes 422
-                ↓
-    (if dialogue exists)
-                ↓
-        Text → ElevenLabs TTS → Audio (WAV)
-                ↓
-    Video + Audio → D-ID Lip-sync → Synced Video
-                ↓
-        Convert to ProRes 422 → Final Cut Pro Ready
+Text Prompt (+ optional Image) → Veo API → Video (MP4)
+                                    ↓
+                          Download & Convert → ProRes 422
+                                    ↓
+                            (if dialogue exists)
+                                    ↓
+                      Text → ElevenLabs TTS → Audio (WAV)
+                                    ↓
+                  Video + Audio → D-ID Lip-sync → Synced Video
+                                    ↓
+                      Convert to ProRes 422 → Final Cut Pro Ready
 ```
 
 ## Quick Start
@@ -96,7 +98,8 @@ veo-fcp/
 │   │   ├── sora_client.py      # OpenAI Sora API client
 │   │   ├── tts_client.py       # ElevenLabs TTS client
 │   │   ├── lipsync_client.py   # D-ID lip-sync client
-│   │   └── claude_client.py    # Claude video analysis client
+│   │   ├── claude_client.py    # Claude video analysis client
+│   │   └── youtube_client.py   # YouTube download client (yt-dlp)
 │   ├── utils/
 │   │   ├── video_processor.py  # Video download & ProRes conversion
 │   │   └── scene_manager.py    # Scene folder management
@@ -128,6 +131,7 @@ python cli.py generate \
   --lighting "Lighting style" \
   --emotion "Emotional tone" \
   --dialogue "Spoken dialogue" \
+  --input-image /path/to/first_frame.jpg  # Optional: use image as first frame
   --project-name my-film
 ```
 
@@ -191,6 +195,39 @@ python cli.py generate \
 - Adding continuity between scenes
 - Extending generated videos with new directions
 - Building narrative progression
+
+### Generate Video from Image (First Frame)
+
+Use an image as the starting frame for video generation:
+
+```bash
+# Generate video starting from an image
+python cli.py generate \
+  --scene-id scene_01 \
+  --prompt "The woman slowly turns her head and smiles" \
+  --input-image /path/to/first_frame.jpg \
+  --project-name my-film
+
+# With dialogue
+python cli.py generate \
+  --scene-id scene_01 \
+  --prompt "Camera slowly zooms in on the character" \
+  --input-image /path/to/character.png \
+  --dialogue "I've been waiting for this moment." \
+  --project-name my-film
+```
+
+**Use this when:**
+- Ensuring visual consistency with existing assets
+- Starting from a specific composition or framing
+- Using AI-generated images as video starters
+- Creating videos that match storyboard frames
+- Maintaining character appearance across scenes
+
+**Supported by all providers:**
+- Google Veo: Native image-to-video support
+- Replicate: Uses Wan i2v models automatically
+- OpenAI Sora: Image input support
 
 ### Generate Video Without Lip-Sync
 
@@ -280,6 +317,53 @@ python cli.py analyze \
 - Creating scene summaries for editing workflows
 - Documenting generated content
 
+### Download from YouTube
+
+Download videos from YouTube using yt-dlp for use as input or reference material:
+
+```bash
+# Basic download
+python cli.py download-youtube \
+  --url "https://youtube.com/watch?v=VIDEO_ID" \
+  --scene-id yt_clip_01 \
+  --project-name my-film
+
+# Download at 720p and convert to ProRes for FCP
+python cli.py download-youtube \
+  --url "https://youtube.com/watch?v=VIDEO_ID" \
+  --scene-id reference_01 \
+  --quality 720p \
+  --to-prores \
+  --project-name my-film
+
+# Download only audio (WAV format)
+python cli.py download-youtube \
+  --url "https://youtube.com/watch?v=VIDEO_ID" \
+  --scene-id audio_ref \
+  --audio-only \
+  --project-name my-film
+
+# Download and analyze with Claude
+python cli.py download-youtube \
+  --url "https://youtube.com/watch?v=VIDEO_ID" \
+  --scene-id analyzed_clip \
+  --analyze \
+  --project-name my-film
+```
+
+**Options:**
+- `--quality`: Video quality preset (best, 1080p, 720p, 480p, worst)
+- `--max-height`: Maximum video height in pixels
+- `--audio-only`: Download only audio in WAV format
+- `--to-prores`: Convert to ProRes 422 after download
+- `--analyze`: Analyze video with Claude after download
+
+**Use this when:**
+- Downloading reference footage for your project
+- Getting source material for video extension
+- Extracting audio from YouTube videos
+- Building a clip library with AI-generated descriptions
+
 ### View All Commands
 ```bash
 python cli.py --help
@@ -355,7 +439,10 @@ scene_01/
   "status": "completed",
   "generation": {
     "prompt": "A woman walks through a futuristic city...",
+    "input_video": null,
+    "input_image": "/path/to/first_frame.jpg",
     "provider": "veo",
+    "model": "veo-2.0-generate-001",
     "generated_at": "2025-12-28 10:30:00"
   },
   "video_analysis": {
@@ -396,6 +483,12 @@ result = workflow.process_scene(config)
 
 print(f"Final video: {result['final_prores']}")
 # Output: projects/mars-landing/scene_mars/scene_mars_final_prores.mov
+
+# With input image as first frame
+result = workflow.process_scene(
+    config,
+    input_image="/path/to/spaceship_frame.jpg"
+)
 ```
 
 ## Troubleshooting

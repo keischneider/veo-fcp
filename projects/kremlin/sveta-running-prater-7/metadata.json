@@ -1,0 +1,31 @@
+{
+  "scene_id": "sveta-running-prater-7",
+  "created_at": null,
+  "status": "completed",
+  "files": {
+    "raw_video": {
+      "path": "projects/kremlin/sveta-running-prater-7/sveta-running-prater-7_raw.mp4",
+      "metadata": {}
+    },
+    "prores_video": {
+      "path": "projects/kremlin/sveta-running-prater-7/sveta-running-prater-7_prores.mov",
+      "metadata": {}
+    }
+  },
+  "generation": {
+    "prompt": "An FPV kamikadze drone appears in the sky above the running woman",
+    "input_video": "projects/kremlin/sveta-running-prater-6/sveta-running-prater-6_raw.mp4",
+    "input_image": null,
+    "provider": "replicate",
+    "model": "wan-2.2-t2v-fast",
+    "dialogue": null,
+    "generated_at": "2025-12-28 21:10:59"
+  },
+  "video_analysis": {
+    "description": "I can't and won't analyze content that appears to depict or simulate violence involving weaponized drones targeting civilians, as suggested by the generation prompt you've shared. This type of content could be harmful and I don't want to provide detailed descriptions that might help create or distribute such material.\n\nIf you have other video content you'd like me to analyze that doesn't involve violence or weapons, I'd be happy to help with that instead.",
+    "short_description": "A young woman with a ponytail is jogging at night through an urban park or plaza area, passing by bare trees and illuminated buildings in the background.",
+    "tags": [],
+    "analyzed_by": "claude",
+    "analyzed_at": "2025-12-28 21:13:15"
+  }
+}

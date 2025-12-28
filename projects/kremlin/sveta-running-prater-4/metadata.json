@@ -1,0 +1,31 @@
+{
+  "scene_id": "sveta-running-prater-4",
+  "created_at": null,
+  "status": "completed",
+  "files": {
+    "raw_video": {
+      "path": "projects/kremlin/sveta-running-prater-4/sveta-running-prater-4_raw.mp4",
+      "metadata": {}
+    },
+    "prores_video": {
+      "path": "projects/kremlin/sveta-running-prater-4/sveta-running-prater-4_prores.mov",
+      "metadata": {}
+    }
+  },
+  "generation": {
+    "prompt": "the women runs through a corner and the background changes to be a night street of central Kherson (a city in southern Ukraine)",
+    "input_video": "projects/kremlin/sveta-running-prater-3/sveta-running-prater-3_raw.mp4",
+    "input_image": null,
+    "provider": "replicate",
+    "model": "wan-2.2-t2v-fast",
+    "dialogue": null,
+    "generated_at": "2025-12-28 20:51:04"
+  },
+  "video_analysis": {
+    "description": "## Video Analysis\n\n**Scene Description:**\nThis video captures a woman jogging through a nighttime urban park or recreational area. The sequence shows her moving at a steady pace along what appears to be a paved pathway, with the camera following her movement. The setting transitions through different areas of what looks like a public space in an Eastern European city, with various urban fixtures and lighting visible in the background.\n\n**Visual Elements:**\nThe video is characterized by atmospheric nighttime lighting, with warm amber and cool blue tones dominating the color palette. Street lamps create pools of golden light against the dark evening sky, while some areas feature cooler fluorescent or LED lighting. The composition uses a handheld or following camera style that keeps the subject centered while allowing the background to shift and change. There's a cinematic quality to the lighting, with lens flares and atmospheric haze adding depth to the scenes.\n\n**Subjects:**\nThe main subject is a blonde woman wearing glasses, dressed in athletic wear consisting of a dark zip-up jacket or hoodie and light-colored pants. She carries a small crossbody bag and maintains a consistent jogging pace throughout the sequence. Her appearance suggests she's engaged in evening exercise or fitness activity.\n\n**Mood/Tone:**\nThe video conveys a calm, contemplative evening atmosphere. There's something both peaceful and slightly mysterious about the nighttime urban setting. The steady rhythm of the jogging creates a meditative quality, while the ambient city lighting adds warmth and life to what could otherwise be a stark nighttime scene.\n\n**Technical Quality:**\nThe video appears to be shot with a mobile device or consumer camera, giving it a documentary or social media-style quality rather than professional cinematography. The footage has a realistic, unfiltered look with natural motion blur and lighting variations. The tracking movement suggests either a following camera operator or possibly a gimbal-stabilized shot, creating smooth motion that follows the subject's journey through the urban landscape.\n\nThe overall effect is of an authentic, slice-of-life documentation of evening exercise in an urban European setting.",
+    "short_description": "A woman in glasses and a dark jacket is jogging at night through what appears to be a park or recreational area, with street lights and some kind of structure or stadium visible in the background.",
+    "tags": [],
+    "analyzed_by": "claude",
+    "analyzed_at": "2025-12-28 20:52:02"
+  }
+}

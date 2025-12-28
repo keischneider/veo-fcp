@@ -1,0 +1,31 @@
+{
+  "scene_id": "sveta-running-prater-2",
+  "created_at": null,
+  "status": "completed",
+  "files": {
+    "raw_video": {
+      "path": "projects/kremlin/sveta-running-prater-2/sveta-running-prater-2_raw.mp4",
+      "metadata": {}
+    },
+    "prores_video": {
+      "path": "projects/kremlin/sveta-running-prater-2/sveta-running-prater-2_prores.mov",
+      "metadata": {}
+    }
+  },
+  "generation": {
+    "prompt": "a woman keeps running, an FPV kamikadze drone appeared in the sky",
+    "input_video": "projects/kremlin/sveta-running-prater/test_replicate_10_raw.mp4",
+    "input_image": null,
+    "provider": "replicate",
+    "model": "wan-2.2-t2v-fast",
+    "dialogue": null,
+    "generated_at": "2025-12-28 10:23:50"
+  },
+  "video_analysis": {
+    "description": "## Video Analysis\n\n**Scene Description:**\nThis video depicts a woman jogging or running at night in what appears to be an amusement park or fairground setting. The scene takes place in an outdoor recreational area with a prominent illuminated Ferris wheel structure dominating the background. Throughout the sequence, a drone with visible LED lights appears and follows the woman as she moves through the space.\n\n**Visual Elements:**\nThe video features dramatic nighttime lighting with warm golden and orange illumination emanating from the Ferris wheel's decorative lights. The lighting creates a striking contrast against the dark sky, giving the scene an atmospheric, cinematic quality. The composition centers the woman in the foreground while using the towering metal framework of the Ferris wheel as a dramatic backdrop. The camera appears to maintain a relatively stable position, suggesting either handheld filming or drone footage. A small aircraft/drone with red and blue LED navigation lights becomes increasingly visible in the upper portions of the frame as the sequence progresses.\n\n**Subjects:**\nThe main subject is a middle-aged woman with blonde hair and glasses, wearing a dark zip-up jacket or hoodie and light-colored pants. She carries a small crossbody bag and maintains a steady jogging pace throughout the sequence. Her demeanor appears calm and focused rather than panicked. A multi-rotor drone with illuminated LED lights serves as a secondary subject, appearing in the later frames of the sequence.\n\n**Mood/Tone:**\nDespite the ominous implications of the original prompt, the actual video conveys a surprisingly peaceful, almost serene nighttime atmosphere. The woman's relaxed jogging pace and the beautiful carnival lighting create a more leisurely, recreational mood rather than one of urgency or danger. The scene has an almost cinematic, artistic quality to it.\n\n**Technical Quality:**\nThe video appears to be shot in high definition with good color reproduction and contrast. The style leans toward cinematic rather than documentary, with thoughtful composition and dramatic lighting. The production quality suggests either professional filming equipment or a high-end consumer camera/smartphone. The nighttime shooting conditions are handled well, maintaining detail in both the illuminated areas and darker regions of the frame.",
+    "short_description": "A woman wearing glasses and a dark jacket poses and smiles for photos in front of an illuminated Ferris wheel at night, with a small drone visible flying in the background during some of the shots.",
+    "tags": [],
+    "analyzed_by": "claude",
+    "analyzed_at": "2025-12-28 10:24:52"
+  }
+}

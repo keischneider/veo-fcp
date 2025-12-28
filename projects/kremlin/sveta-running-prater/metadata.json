@@ -1,0 +1,31 @@
+{
+  "scene_id": "test_replicate_10",
+  "created_at": null,
+  "status": "completed",
+  "files": {
+    "raw_video": {
+      "path": "projects/kremlin/test_replicate_10/test_replicate_10_raw.mp4",
+      "metadata": {}
+    },
+    "prores_video": {
+      "path": "projects/kremlin/test_replicate_10/test_replicate_10_prores.mov",
+      "metadata": {}
+    }
+  },
+  "generation": {
+    "prompt": "a woman running in the city under shelling fire",
+    "input_video": null,
+    "input_image": "projects/sveta-running-kherson/561A5FE0-5458-4356-BA04-638613196662_1_105_c.jpeg",
+    "provider": "replicate",
+    "model": "wan-2.2-t2v-fast",
+    "dialogue": null,
+    "generated_at": "2025-12-28 10:15:58"
+  },
+  "video_analysis": {
+    "description": "## Video Analysis\n\n### Scene Description\nThis video shows a woman in an urban nighttime setting, positioned in front of what appears to be an amusement park or carnival area with a large Ferris wheel as the dominant backdrop. Rather than depicting the dramatic war scenario suggested by the original prompt, the footage captures someone in a relatively peaceful, recreational environment. The woman appears to be walking or moving slightly, possibly being filmed for social media or documentary purposes.\n\n### Visual Elements\nThe scene is dramatically lit with warm, golden lighting from the Ferris wheel's illuminated bulbs contrasting against the dark night sky. The lighting creates an atmospheric, almost cinematic quality with rich oranges and yellows from the carnival lights mixing with cooler tones in the shadows. The composition places the subject in the foreground with the impressive steel framework of the Ferris wheel creating strong geometric lines in the background. The camera appears relatively stable, suggesting handheld filming with minimal movement between frames.\n\n### Subjects\nThe main subject is a blonde woman wearing glasses and a dark leather or synthetic jacket. She has a shoulder bag or crossbody purse and appears to be smiling in most frames. Her demeanor seems relaxed and pleasant rather than distressed or urgent. In the background, there are some vehicles (possibly including what looks like a small cart or utility vehicle) and the large carnival ride structure.\n\n### Mood/Tone\nThe video conveys a casual, somewhat cheerful atmosphere. Despite the nighttime setting, the mood appears positive and leisurely rather than tense or dangerous. The carnival setting and the subject's demeanor suggest this might be documenting a pleasant evening outing or visit to an entertainment venue.\n\n### Technical Quality\nThe video appears to be shot on a mobile device or consumer camera with decent but not professional quality. The lighting conditions create some challenges typical of nighttime photography, but the carnival's illumination provides sufficient light for clear visibility. The style is documentary or candid in nature, resembling personal video content or informal journalism rather than high-production cinematography.\n\n**Note**: The actual video content significantly differs from the original generation prompt, showing a peaceful carnival scene rather than a wartime scenario.",
+    "short_description": "A woman wearing glasses and a dark jacket stands in front of an illuminated Ferris wheel at night, smiling and making cheerful gestures while appearing to pose for photos or a video at what looks like a carnival or fair.",
+    "tags": [],
+    "analyzed_by": "claude",
+    "analyzed_at": "2025-12-28 10:17:12"
+  }
+}

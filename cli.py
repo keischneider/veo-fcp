@@ -395,6 +395,137 @@ def analyze(scene_id, projects_root, project_name, video_path, include_tags):
         sys.exit(1)
 
 
+@cli.command('download-youtube')
+@click.option('--url', required=True, help='YouTube video URL')
+@click.option('--scene-id', required=True, help='Scene identifier for the downloaded video')
+@click.option('--projects-root', default='./projects', help='Root directory for all projects')
+@click.option('--project-name', default='default', help='Project name')
+@click.option('--quality', default='best', type=click.Choice(['best', '1080p', '720p', '480p', 'worst']),
+              help='Video quality preset')
+@click.option('--max-height', type=int, help='Maximum video height (e.g., 1080, 720)')
+@click.option('--audio-only', is_flag=True, help='Download only audio (WAV format)')
+@click.option('--to-prores', is_flag=True, help='Convert to ProRes after download')
+@click.option('--analyze', is_flag=True, help='Analyze video with Claude after download')
+def download_youtube(url, scene_id, projects_root, project_name, quality, max_height, audio_only, to_prores, analyze):
+    """Download video from YouTube using yt-dlp"""
+
+    console.print(f"\n[bold cyan]YouTube Video Download[/bold cyan]")
+    console.print(f"Project: [yellow]{project_name}[/yellow]")
+    console.print(f"Scene: [yellow]{scene_id}[/yellow]\n")
+
+    try:
+        from src.clients.youtube_client import YouTubeClient
+        from src.utils.scene_manager import SceneManager
+        from src.utils.video_processor import VideoProcessor
+
+        # Initialize clients
+        youtube_client = YouTubeClient()
+        scene_manager = SceneManager(projects_root=projects_root, project_name=project_name)
+        video_processor = VideoProcessor()
+
+        # Get video info first
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console
+        ) as progress:
+            task = progress.add_task("Fetching video info...", total=None)
+            video_info = youtube_client.get_video_info(url)
+
+        console.print(f"Title: [yellow]{video_info.get('title', 'Unknown')}[/yellow]")
+        console.print(f"Duration: [yellow]{video_info.get('duration', 0)}s[/yellow]")
+        console.print(f"Resolution: [yellow]{video_info.get('width', '?')}x{video_info.get('height', '?')}[/yellow]\n")
+
+        # Setup scene directory
+        scene_dir = scene_manager.get_scene_path(scene_id)
+        os.makedirs(scene_dir, exist_ok=True)
+
+        # Download
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console
+        ) as progress:
+            if audio_only:
+                task = progress.add_task("Downloading audio...", total=None)
+                output_base = os.path.join(scene_dir, f"{scene_id}_audio")
+                downloaded_path = youtube_client.download_audio(url, output_base)
+            else:
+                task = progress.add_task("Downloading video...", total=None)
+                output_base = os.path.join(scene_dir, f"{scene_id}_raw")
+                downloaded_path = youtube_client.download_video(
+                    url, output_base, quality=quality, max_height=max_height
+                )
+
+        console.print(f"\n[bold green]✓ Downloaded:[/bold green] {downloaded_path}")
+
+        # Convert to ProRes if requested
+        prores_path = None
+        if to_prores and not audio_only:
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                console=console
+            ) as progress:
+                task = progress.add_task("Converting to ProRes...", total=None)
+                prores_path = os.path.join(scene_dir, f"{scene_id}_prores.mov")
+                video_processor.convert_to_prores(downloaded_path, prores_path)
+
+            console.print(f"[bold green]✓ ProRes:[/bold green] {prores_path}")
+
+        # Update scene metadata
+        scene_manager.update_scene_metadata(scene_id, {
+            'status': 'completed',
+            'source': {
+                'type': 'youtube',
+                'url': url,
+                'title': video_info.get('title'),
+                'duration': video_info.get('duration'),
+                'video_id': video_info.get('id'),
+            },
+            'files': {
+                'raw_video': {'path': downloaded_path} if not audio_only else None,
+                'audio': {'path': downloaded_path} if audio_only else None,
+                'prores_video': {'path': prores_path} if prores_path else None,
+            }
+        })
+
+        # Analyze if requested
+        if analyze and not audio_only:
+            console.print("\n[bold cyan]Running video analysis with Claude...[/bold cyan]")
+            try:
+                from src.clients.claude_client import ClaudeClient
+
+                claude_client = ClaudeClient()
+                video_to_analyze = prores_path or downloaded_path
+
+                with Progress(
+                    SpinnerColumn(),
+                    TextColumn("[progress.description]{task.description}"),
+                    console=console
+                ) as progress:
+                    task = progress.add_task("Analyzing video...", total=None)
+                    description = claude_client.analyze_video(video_to_analyze)
+                    short_desc = claude_client.generate_short_description(video_to_analyze)
+
+                scene_manager.save_video_description(
+                    scene_id=scene_id,
+                    description=description,
+                    short_description=short_desc
+                )
+
+                console.print(f"\n[bold magenta]Description:[/bold magenta] {short_desc}")
+
+            except Exception as e:
+                console.print(f"[yellow]Warning: Video analysis failed: {str(e)}[/yellow]")
+
+        console.print(f"\n[bold green]✓ YouTube download complete![/bold green]\n")
+
+    except Exception as e:
+        console.print(f"\n[bold red]✗ Error:[/bold red] {str(e)}\n")
+        sys.exit(1)
+
+
 @cli.command()
 def setup():
     """Setup wizard for configuration"""

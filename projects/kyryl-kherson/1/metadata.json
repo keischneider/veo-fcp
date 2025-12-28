@@ -1,0 +1,31 @@
+{
+  "scene_id": "1",
+  "created_at": null,
+  "status": "completed",
+  "files": {
+    "raw_video": {
+      "path": "projects/kyryl-kherson/1/1_raw.mp4",
+      "metadata": {}
+    },
+    "prores_video": {
+      "path": "projects/kyryl-kherson/1/1_prores.mov",
+      "metadata": {}
+    }
+  },
+  "generation": {
+    "prompt": "normal speed a man walking in the war-destroyed Kherson",
+    "input_video": null,
+    "input_image": "projects/kyryl-kherson/1/me-d.png",
+    "provider": "replicate",
+    "model": "wan-2.2-t2v-fast",
+    "dialogue": null,
+    "generated_at": "2025-12-28 21:53:50"
+  },
+  "video_analysis": {
+    "description": "## Video Analysis\n\n### Scene Description\nThis video depicts a man walking through what appears to be a war-damaged urban area in Kherson, Ukraine. The sequence shows him moving at a normal pace along a pedestrian walkway or bridge, with heavily damaged buildings visible in the background. The scene captures a moment of everyday life persisting amid the aftermath of conflict, as the subject appears to be going about routine activities despite the surrounding destruction.\n\n### Visual Elements\nThe video is shot in natural daylight under a partly cloudy sky, creating good visibility and contrast. The lighting is bright and clear, typical of daytime outdoor photography. The composition uses a medium shot perspective, keeping the subject prominently in the foreground while maintaining the damaged cityscape as a significant background element. The camera appears to follow the subject's movement from a fixed or slowly moving position, creating a documentary-style tracking shot. The color palette is dominated by natural tones - the green of the subject's shirt, blue sky with white clouds, and the muted browns and grays of the damaged architecture.\n\n### Subjects\nThe main subject is a young man wearing a distinctive green Adidas sports shirt with white stripes, dark shorts, and sunglasses. He carries a patterned shopping bag or tote bag and appears to be walking casually. His body language suggests normalcy and routine rather than distress or urgency. In the background, severely damaged multi-story buildings are prominent, showing missing walls, exposed interiors, and structural collapse. Graffiti is visible on a concrete barrier in the foreground, and urban infrastructure like power lines and street elements frame the scene.\n\n### Mood/Tone\nThe video conveys a complex emotional tone that juxtaposes resilience with devastation. While the subject's casual demeanor and ordinary activity suggest adaptation and the continuation of daily life, the extensive war damage in the background creates a sobering reminder of recent conflict. The mood is simultaneously documentary-realistic and poignant, capturing how people maintain normalcy in extraordinary circumstances.\n\n### Technical Quality\nThe video appears to be shot with good technical quality, likely on a smartphone or consumer camera, giving it a documentary or citizen journalism aesthetic. The footage is clear and well-exposed with natural color reproduction. The style is distinctly documentary rather than cinematic, with straightforward framing and movement that prioritizes capturing reality over artistic composition. The production value is consistent with contemporary social media or news documentation, presenting an unfiltered view of the situation.",
+    "short_description": "A man in a green Adidas shirt carries a patterned bag while walking past graffitied walls in what appears to be a war-damaged urban area with destroyed buildings visible in the background.",
+    "tags": [],
+    "analyzed_by": "claude",
+    "analyzed_at": "2025-12-28 21:55:13"
+  }
+}

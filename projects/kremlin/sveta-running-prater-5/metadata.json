@@ -1,0 +1,31 @@
+{
+  "scene_id": "sveta-running-prater-5",
+  "created_at": null,
+  "status": "completed",
+  "files": {
+    "raw_video": {
+      "path": "projects/kremlin/sveta-running-prater-5/sveta-running-prater-5_raw.mp4",
+      "metadata": {}
+    },
+    "prores_video": {
+      "path": "projects/kremlin/sveta-running-prater-5/sveta-running-prater-5_prores.mov",
+      "metadata": {}
+    }
+  },
+  "generation": {
+    "prompt": "the women runs through a corner and the background changes to be a night street of central Kherson (a city in southern Ukraine)",
+    "input_video": "projects/kremlin/sveta-running-prater-4/sveta-running-prater-4_raw.mp4",
+    "input_image": null,
+    "provider": "replicate",
+    "model": "wan-2.2-t2v-fast",
+    "dialogue": null,
+    "generated_at": "2025-12-28 20:53:44"
+  },
+  "video_analysis": {
+    "description": "## Video Analysis\n\n**Scene Description:**\nThis video captures a woman jogging through the nighttime streets of what appears to be central Kherson, Ukraine. The sequence shows her running along a well-lit urban path, moving past bare winter trees and through what looks like a park or boulevard area before transitioning to more densely built city streets. The camera follows her movement, creating a sense of journey through the urban landscape.\n\n**Visual Elements:**\nThe video is characterized by warm, golden street lighting that creates a cinematic glow against the cool night sky. The lighting comes primarily from street lamps, which cast dramatic shadows from the leafless tree branches overhead, creating intricate patterns. The composition uses a following camera angle that keeps the subject in frame while allowing the background architecture and streetscape to flow past. The color palette is dominated by warm amber and orange tones from the artificial lighting contrasted against the deep blues and blacks of the night sky.\n\n**Subjects:**\nThe main subject is a young woman with glasses and her hair pulled back in a ponytail. She's dressed for exercise in a dark zip-up hoodie or jacket and light-colored pants, carrying what appears to be a small bag or purse across her body. Her steady jogging pace and athletic posture suggest this is a regular fitness routine. The background features typical Eastern European urban architecture, including multi-story buildings, street infrastructure, and mature trees lining the pathways.\n\n**Mood/Tone:**\nThe video conveys a peaceful, contemplative mood despite the urban setting. There's a sense of solitude and determination as the woman maintains her exercise routine through the quiet city streets. The warm lighting creates an almost magical quality to the nighttime scene, transforming what could be an ordinary jog into something more cinematic and beautiful.\n\n**Technical Quality:**\nThe video appears to be shot with a handheld camera or possibly a smartphone, giving it a documentary-style authenticity rather than a highly polished cinematic look. There's a natural, slightly shaky quality to the camera movement that follows the subject's motion. The lighting conditions are well-captured, with good exposure balancing the bright street lights and darker surroundings. The overall quality suggests this could be either a planned video shoot or a more spontaneous documentation of the nighttime run.",
+    "short_description": "A woman in glasses and a black hoodie is jogging at night through an urban area with street lights and bare trees visible in the background.",
+    "tags": [],
+    "analyzed_by": "claude",
+    "analyzed_at": "2025-12-28 20:54:55"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "scene_id": "2",
+  "created_at": null,
+  "status": "completed",
+  "files": {
+    "raw_video": {
+      "path": "projects/kyryl-kherson/2/2_raw.mp4",
+      "metadata": {}
+    },
+    "prores_video": {
+      "path": "projects/kyryl-kherson/2/2_prores.mov",
+      "metadata": {}
+    }
+  },
+  "generation": {
+    "prompt": "a man walking in the war-destroyed Kherson",
+    "input_video": "projects/kyryl-kherson/1/1_raw.mp4",
+    "input_image": null,
+    "provider": "replicate",
+    "model": "wan-2.2-t2v-fast",
+    "dialogue": null,
+    "generated_at": "2025-12-28 22:11:38"
+  },
+  "video_analysis": {
+    "description": "## Video Analysis\n\n### Scene Description\nThis video depicts a somber scene of a man walking through a war-damaged urban area, specifically in what appears to be Kherson. The sequence shows him moving along a public space or plaza area, with severely damaged buildings prominently visible in the background. The setting is clearly post-conflict, with the remnants of destroyed architecture serving as a stark backdrop to everyday life continuing.\n\n### Visual Elements\nThe footage is shot in natural daylight with bright, clear skies featuring white clouds, creating an almost jarring contrast with the destruction below. The color palette is dominated by muted earth tones - beiges and browns from the damaged buildings, punctuated by the man's bright green Adidas-style athletic shirt with white stripes. The camera work appears to be handheld or following the subject, creating a documentary-style perspective. The lighting is natural and even, typical of daytime outdoor filming.\n\n### Subjects\nThe main subject is a young man walking through the scene, wearing a distinctive bright green athletic shirt with white stripes and dark shorts. He carries a white patterned shopping bag or tote and appears to be wearing a dark wristwatch. His posture and gait suggest he's moving with purpose through the area. The most striking element is the heavily damaged multi-story building in the background, which shows significant structural damage with collapsed sections and exposed framework, clearly the result of warfare or bombardment.\n\n### Mood/Tone\nThe video conveys a powerful sense of resilience and the persistence of daily life amid devastation. There's a melancholic quality to seeing normal activities - a person going about their business with a shopping bag - against such a backdrop of destruction. The bright, almost cheerful weather and the man's casual attire create a poignant juxtaposition with the war-torn environment.\n\n### Technical Quality\nThe video appears to be shot with a consumer-grade camera or smartphone, giving it an authentic, documentary-style quality. The footage is steady and well-lit, with good color reproduction. The watermark visible in the corner suggests this may be journalistic or documentary content. The sequential frames show smooth motion, indicating decent frame rate and stability. The style is clearly documentary rather than cinematic, emphasizing the real-world, unfiltered nature of the subject matter.\n\nThis appears to be documentation of life continuing in a conflict zone, capturing both the human element and the physical toll of war on urban infrastructure.",
+    "short_description": "A person in a green and white striped shirt carries a patterned bag while walking past a heavily damaged building with collapsed sections in what appears to be a war-torn urban area.",
+    "tags": [],
+    "analyzed_by": "claude",
+    "analyzed_at": "2025-12-28 22:12:54"
+  }
+}

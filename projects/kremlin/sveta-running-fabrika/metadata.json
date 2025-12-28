@@ -1,0 +1,31 @@
+{
+  "scene_id": "sveta-running-fabrika",
+  "created_at": null,
+  "status": "completed",
+  "files": {
+    "raw_video": {
+      "path": "projects/kremlin/sveta-running-fabrika/sveta-running-fabrika_raw.mp4",
+      "metadata": {}
+    },
+    "prores_video": {
+      "path": "projects/kremlin/sveta-running-fabrika/sveta-running-fabrika_prores.mov",
+      "metadata": {}
+    }
+  },
+  "generation": {
+    "prompt": "the background changes (as on the input image)",
+    "input_video": "projects/kremlin/sveta-running-prater-3/sveta-running-prater-3_raw.mp4",
+    "input_image": "projects/kremlin/sveta-running-fabrika/image.png",
+    "provider": "replicate",
+    "model": "wan-2.2-t2v-fast",
+    "dialogue": null,
+    "generated_at": "2025-12-28 20:05:51"
+  },
+  "video_analysis": {
+    "description": "## Video Analysis\n\n**Scene Description:**\nThis video captures a winter evening at a modern shopping center or retail complex in what appears to be Russia (based on the Cyrillic text visible on signs). The sequence shows the same location from a consistent viewpoint, with the primary action being the dynamic changes in the large LED advertising displays mounted on the buildings. The scene is set during twilight or early evening hours, creating a dramatic contrast between the illuminated commercial displays and the darkening sky.\n\n**Visual Elements:**\nThe composition is dominated by a central shopping complex with a distinctive golden latticed or geometric facade that serves as an architectural focal point. Multiple large LED screens flank this central structure, displaying various advertisements that change throughout the sequence. The color palette shifts dramatically as different advertisements cycle through - from cool blues and whites to warm reds and oranges, creating an ever-changing ambient lighting effect that reflects off the snow-covered ground and wet pavement.\n\nThe lighting is primarily artificial, emanating from the building's LED displays, neon signage, and street lighting. This creates a vibrant, almost cyberpunk-like atmosphere with rich color saturation and strong contrasts. The camera appears stationary, maintaining a wide establishing shot that captures the full breadth of the commercial complex.\n\n**Subjects:**\nThe main subjects are the commercial buildings themselves, featuring prominent store signs including \"\u0441\u043f\u043e\u0440\u0442\u043c\u0430\u0441\u0442\u0435\u0440\" (Sportmaster), and various retail brands. Several cars are parked in the foreground and scattered throughout the parking area, appearing as dark silhouettes against the illuminated backdrop. Bare winter trees line the complex, their skeletal branches adding texture against the colorful digital displays. No people are clearly visible in the frames, emphasizing the commercial architecture and technology over human activity.\n\n**Mood/Tone:**\nThe video conveys a modern, consumer-driven urban atmosphere with a slightly futuristic feel. There's an energetic quality created by the constantly changing digital displays, yet also a sense of quietude due to the winter setting and apparent lack of pedestrian activity. The mood is simultaneously vibrant and somewhat sterile - showcasing the intersection of technology, commerce, and urban winter landscapes.\n\n**Technical Quality:**\nThe video exhibits high production quality with sharp detail, excellent color reproduction, and professional-grade stability. The cinematographic style is documentary or commercial in nature, with careful attention to composition and timing to showcase the changing digital displays effectively. The wide-angle perspective and consistent framing suggest this may have been shot with a tripod-mounted camera, possibly for promotional or time-lapse purposes. The exposure is well-balanced to capture both the bright LED displays and the darker architectural details without losing information in either the highlights or shadows.",
+    "short_description": "This video shows a slow panoramic sweep of a Russian shopping center or mall complex during winter at night, featuring bright illuminated storefronts, digital advertising displays, and a snow-covered parking lot with cars. The camera pans smoothly from left to right, revealing the modern commercial building's colorful LED signage and architectural details against the dark evening sky.",
+    "tags": [],
+    "analyzed_by": "claude",
+    "analyzed_at": "2025-12-28 20:07:11"
+  }
+}
